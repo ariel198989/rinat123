@@ -1,0 +1,345 @@
+<html><head><base href="https://cdn.skypack.dev/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>יריד מיט-אפ מילואימניקים</title><script src="https://unpkg.com/@supabase/supabase-js@2"></script><script>
+        console.log('Script loaded');
+
+        // Define functions globally
+        function openModal() {
+            console.log('Opening modal');
+            document.getElementById('registrationModal').style.display = "block";
+        }
+
+        function closeModal() {
+            console.log('Closing modal');
+            document.getElementById('registrationModal').style.display = "none";
+        }
+
+        // Initialize Supabase
+        const supabaseUrl = 'https://oyvlslrwnwqiabbrabuh.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95dmxzbHJ3bndxaWFiYnJhYnVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5OTUxMjQsImV4cCI6MjA0OTU3MTEyNH0.koDZo7Oe2Z_PuWIVHUMaRdlEo6d8dKhVgr012958dlI';
+        console.log('Initializing Supabase with URL:', supabaseUrl);
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        console.log('Supabase client created');
+
+        // When document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            
+            const form = document.getElementById('registrationForm');
+            console.log('Form found:', form);
+
+            // Form submission
+            form.addEventListener('submit', async function(e) {
+                console.log('Form submit event triggered');
+                e.preventDefault();
+                console.log('Default prevented');
+
+                // Get form data
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const phone = document.getElementById('phone').value;
+                const email = document.getElementById('email').value;
+                const status = document.getElementById('status').value;
+                const position = document.getElementById('position').value;
+                const id = document.getElementById('id').value;
+
+                const formData = {
+                    name: `${firstName} ${lastName}`,
+                    phone: phone,
+                    email: email,
+                    message: `סטטוס: ${status}, תפקיד מועדף: ${position}, ת.ז: ${id}`
+                };
+
+                console.log('Form data collected:', formData);
+
+                try {
+                    console.log('Attempting to insert data to Supabase');
+                    const { data, error } = await supabaseClient
+                        .from('leads')
+                        .insert([formData]);
+
+                    console.log('Supabase response - Data:', data, 'Error:', error);
+
+                    if (error) {
+                        console.error('Supabase error:', error);
+                        alert('קרתה שגיאה בשליחת הטופס: ' + error.message);
+                        return false;
+                    }
+                    
+                    console.log('Data inserted successfully');
+                    alert('הטופס נשלח בהצלחה!');
+                    form.reset();
+                    closeModal();
+                } catch (error) {
+                    console.error('Caught error:', error);
+                    alert('קרתה שגיאה בשליחת הטופס');
+                }
+
+                return false;
+            });
+
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('registrationModal')) {
+                    closeModal();
+                }
+            };
+        });
+    </script><style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Heebo', sans-serif;
+    direction: rtl;
+    background-color: #f5f5f5;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 119.0176%;
+    padding-bottom: 0;
+    box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);
+    margin-top: 1.6em;
+    margin-bottom: 0.9em;
+    overflow: hidden;
+    border-radius: 8px;
+    will-change: transform;
+}
+
+.hero iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.content {
+    text-align: center;
+    padding: 20px;
+}
+
+.details {
+    padding: 50px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.details h2 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.detail-item {
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.cta-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.credit {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.credit a {
+    color: #666;
+    text-decoration: none;
+}
+
+.credit a:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    direction: rtl;
+    position: relative;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+.close {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+    top: 10px;
+}
+
+.close:hover {
+    color: black;
+}
+</style></head><body>
+    <div class="hero">
+        <iframe loading="lazy" src="https://www.canva.com/design/DAGZEGl9VLk/2jex_nOJvf-neG3_0MkrXA/view?embed" 
+                allowfullscreen="allowfullscreen" allow="fullscreen">
+        </iframe>
+    </div>
+
+    <div class="credit">
+    </div>
+
+    <div class="content">
+        <button type="button" class="cta-button" onclick="openModal()">להרשמה</button>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>טופס הרשמה</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="firstName">שם פרטי</label>
+                    <input type="text" id="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">שם משפחה</label>
+                    <input type="text" id="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="id">תעודת זהות</label>
+                    <input type="text" id="id" required pattern="[0-9]{9}" title="נא להזין 9 ספרות">
+                </div>
+                <div class="form-group">
+                    <label for="status">סטטוס</label>
+                    <select id="status" required>
+                        <option value="">בחר סטטוס</option>
+                        <option value="graduate">בוגר אחריי</option>
+                        <option value="reservist">מילואימניק</option>
+                        <option value="both">גם וגם</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone">טלפון</label>
+                    <input type="tel" id="phone" required pattern="[0-9]{10}" title="נא להזין מספר טלפון תקין">
+                </div>
+                <div class="form-group">
+                    <label for="email">אימייל</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="position">תפקיד מועדף</label>
+                    <select id="position" required>
+                        <option value="">בחר תפקיד</option>
+                        <option value="aircraft">אבטחת מטוסים</option>
+                        <option value="security">בודק בטחוני</option>
+                        <option value="management">מנהל תעופה</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">שלח טופס</button>
+            </form>
+        </div>
+    </div>
+
+    <section class="details">
+        <h2>פרטי האירוע</h2>
+        <div class="details-grid">
+            <div class="detail-item">
+                <h3>מתי?</h3>
+                <p>יום רביעי, 14.02.24</p>
+                <p>17:00-21:00</p>
+            </div>
+            <div class="detail-item">
+                <h3>איפה?</h3>
+                <p>מכללת סמי מעון</p>
+                <p>באר שבע</p>
+            </div>
+            <div class="detail-item">
+                <h3>למה כדאי להגיע?</h3>
+                <p>✓ מפגש עם מעסיקים מוביל����ם</p>
+                <p>✓ הזדמנויות תעסוקה ייחודיות</p>
+                <p>✓ נטוורקינג מקצועי</p>
+            </div>
+        </div>
+    </section>
+</body></html>
